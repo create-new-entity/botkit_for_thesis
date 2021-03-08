@@ -43,6 +43,12 @@ if (process.env.CMS_URI) {
     }));
 }
 
+var wit = require('botkit-middleware-witai')({
+    token: 'YNYO7PDP33T7LY6PSH37RQ6OB26DE4EU'
+});
+
+controller.middleware.receive.use(wit.receive);
+
 // Once the bot has booted up its internal services, you can use them to do stuff.
 controller.ready(() => {
 

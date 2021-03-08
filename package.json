@@ -8,9 +8,11 @@
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "dependencies": {
+    "axios": "^0.21.1",
     "botbuilder-adapter-web": "^1.0.9",
     "botbuilder-storage-mongodb": "^0.9.5",
     "botkit": "^4.10.0",
+    "botkit-middleware-witai": "0.0.2",
     "botkit-plugin-cms": "^1.0.3",
     "dotenv": "^7.0.0"
   }
