@@ -1,7 +1,7 @@
 /**
  * Copyright (c) Microsoft Corporation. All rights reserved.
  * Licensed under the MIT License.
- */
+ */ 
 var converter = new showdown.Converter();
 converter.setOption('openLinksInNewWindow', true);
 
@@ -238,14 +238,26 @@ var Botkit = {
         this.input.focus();
     },
     renderMessage: function (message) {
+
         var that = this;
         if (!that.next_line) {
             that.next_line = document.createElement('div');
             that.message_list.appendChild(that.next_line);
         }
-        if (message.text) {
+
+        if(message.text) {
             message.html = converter.makeHtml(message.text);
         }
+        else {
+            let paragraphs = '';
+            for(let i in message) {
+                if(i === 'type') continue;
+                paragraphs = paragraphs + converter.makeHtml(message[i]);
+            }
+            let divElem = '<div>\n' + paragraphs + '</div>\n';
+            message.html = divElem;
+        }
+        
 
         that.next_line.innerHTML = that.message_template({
             message: message
