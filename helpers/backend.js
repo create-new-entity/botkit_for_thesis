@@ -22,6 +22,17 @@ const getAvailableGameNames = async () => {
   }
 };
 
+const getBalance = async () => {
+  try {
+    const resp = await axios.get(CHECK_BALANCE);
+    return resp.data.balance;
+  }
+  catch(err) {
+    console.log('Error in getBalance');
+  }
+};
+
 module.exports = {
-  getAvailableGameNames
+  getAvailableGameNames,
+  getBalance
 };
