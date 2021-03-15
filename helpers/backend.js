@@ -82,9 +82,17 @@ const getGameIdsFromGameNames = async (games) => {
   }
 };
 
-const isCartAffordable = async (game_ids) => {
+const isCartAffordable = async () => {
   try {
+
     let cartGames = await getCart();
+
+    if(!cartGames || !cartGames.length){
+      return [
+        `Your cart is empty..`
+      ];
+    }
+
     let game_ids = await getGameIdsFromGameNames(cartGames);
     let res = await axios.get(CHECK_AFFORDABILITY, { data: { game_ids } });
     isAffordableObj = res.data;
@@ -124,6 +132,46 @@ const removeAllFromCart = async () => {
   }
 };
 
+const purchaseCart = async () => {
+  try {
+
+    let gamesInCart = await getCart();
+    if(!gamesInCart || !gamesInCart.length) {
+      return [
+        'Your cart is empty.'
+      ];
+    }
+
+    let game_ids = await getGameIdsFromGameNames(gamesInCart);
+    let res = await axios.get(CHECK_AFFORDABILITY, { data: { game_ids } });
+    isAffordableObj = res.data;
+
+    if(!isAffordableObj) throw new Error();
+
+    if(!isAffordableObj.can_afford) {
+      return [
+        `Sorry, but you can't afford it.`,
+        `Your balance is ${isAffordableObj.balance} euro(s)`,
+        `Total cost of the cart is ${isAffordableObj.cost}`,
+        `You need to add ${isAffordableObj.shortage} euro(s)`
+      ];
+    }
+    
+    res = await axios.post(PURCHASE, { game_ids });
+    if(res.status === 200) {
+      return [
+        `Purchase successful. You can check your library now.`
+      ];
+    }
+    else return [
+      `Purchase failed. Something went wrong. Try again later.`
+    ];
+  }
+  catch(err) {
+    console.log('Error in purchaseCart');
+  }
+};
+
 
 module.exports = {
   getAvailableGameNames,
@@ -133,5 +181,6 @@ module.exports = {
   removeGamesFromCart,
   getGameIdsFromGameNames,
   isCartAffordable,
-  removeAllFromCart
+  removeAllFromCart,
+  purchaseCart
 };

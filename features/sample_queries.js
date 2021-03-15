@@ -100,8 +100,8 @@ module.exports = function(controller) {
     ['message'],
 
     async (bot, message) => {
-      let isAffordable = await backendFns.isCartAffordable();
-      await bot.reply(message, isAffordable);
+      let isAffordableMsg = await backendFns.isCartAffordable();
+      await bot.reply(message, isAffordableMsg);
     }
   
   );
@@ -116,8 +116,24 @@ module.exports = function(controller) {
     ['message'],
 
     async (bot, message) => {
-      let removeAllFromCart = await backendFns.removeAllFromCart();
-      await bot.reply(message, removeAllFromCart);
+      let removeAllFrmCartMsg = await backendFns.removeAllFromCart();
+      await bot.reply(message, removeAllFrmCartMsg);
+    }
+  
+  );
+
+
+  controller.hears(
+
+    async (message) => {
+        return message.intents[0].entities.intent[0].value.localeCompare(INTENTS.BUY_CART_ITEMS) === 0;
+    },
+
+    ['message'],
+
+    async (bot, message) => {
+      let purchaseMsg = await backendFns.purchaseCart();
+      await bot.reply(message, purchaseMsg);
     }
   
   );
