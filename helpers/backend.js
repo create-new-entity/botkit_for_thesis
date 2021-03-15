@@ -15,6 +15,7 @@ ADD_BALANCE = BASE_URL + 'add_balance';
 BASE_URL_CART = 'http://localhost:3010/';
 ADD_CART = BASE_URL_CART + 'add';
 REMOVE_GAME_FROM_CART = BASE_URL_CART + 'remove';
+REMOVE_ALL_GAMES_FROM_CART = BASE_URL_CART + 'remove_all';
 
 
 const getAvailableGameNames = async () => {
@@ -111,6 +112,19 @@ const isCartAffordable = async (game_ids) => {
 };
 
 
+const removeAllFromCart = async () => {
+  try {
+    let res = await axios.post(REMOVE_ALL_GAMES_FROM_CART);
+    return [
+      'Everything has been removed from cart.'
+    ];
+  }
+  catch(err) {
+    console.log('Error in removeAllFromCart');
+  }
+};
+
+
 module.exports = {
   getAvailableGameNames,
   getBalance,
@@ -118,5 +132,6 @@ module.exports = {
   getCart,
   removeGamesFromCart,
   getGameIdsFromGameNames,
-  isCartAffordable
+  isCartAffordable,
+  removeAllFromCart
 };

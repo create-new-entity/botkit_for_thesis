@@ -106,4 +106,20 @@ module.exports = function(controller) {
   
   );
 
+
+  controller.hears(
+
+    async (message) => {
+        return message.intents[0].entities.intent[0].value.localeCompare(INTENTS.REMOVE_ALL_FROM_CART) === 0;
+    },
+
+    ['message'],
+
+    async (bot, message) => {
+      let removeAllFromCart = await backendFns.removeAllFromCart();
+      await bot.reply(message, removeAllFromCart);
+    }
+  
+  );
+
 }
