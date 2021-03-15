@@ -167,6 +167,22 @@ module.exports = function(controller) {
       await bot.reply(message, removeFromLibraryMsg);
     }
   
-  );    
+  );
+  
+  
+  controller.hears(
+
+    async (message) => {
+        return message.intents[0].entities.intent[0].value.localeCompare(INTENTS.ADD_MONEY) === 0;
+    },
+
+    ['message'],
+
+    async (bot, message) => {
+      let addMoneyMsg = await backendFns.getAddMoneyMsg(message.intents[0].entities.amount_of_money[0].value);
+      await bot.reply(message, addMoneyMsg);
+    }
+  
+  );
 
 }

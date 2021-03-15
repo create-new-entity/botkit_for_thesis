@@ -177,8 +177,9 @@ const getLibraryGameNames = async () => {
   try {
     let res = await axios.get(SHOW_LIBRARY_GAMES);
     let libraryGames = res.data.library;
-    if(!libraryGames || !libraryGames.length) throw new Error();
-
+    if(!libraryGames) throw new Error();
+    if(!libraryGames.length) return [];
+    
     return libraryGames.map(game => game.name);
   }
   catch(err) {
@@ -242,6 +243,31 @@ const getRemoveGameFromLibraryMsg = async (gameNames) => {
   }
 }
 
+const addMoney = async (amount) => {
+  try {
+    console.log(typeof amount);
+    let res = await axios.post(ADD_BALANCE, { amount });
+    return res.data;
+  }
+  catch(err) {
+    console.log('Error in addMoney');
+  }
+};
+
+const getAddMoneyMsg = async (amount) => {
+  let balanceNAmount = await addMoney(amount);
+
+  if(!balanceNAmount) {
+    return [
+      'Sorry could not add balance. Something went wrong.'
+    ];
+  }
+
+  return [
+    `${balanceNAmount.amount} euros added. New balance is ${balanceNAmount.balance}.`
+  ];
+};
+
 module.exports = {
   getAvailableGameNames,
   getBalance,
@@ -253,5 +279,6 @@ module.exports = {
   removeAllFromCart,
   purchaseCart,
   getShowLibraryGamesMsg,
-  getRemoveGameFromLibraryMsg
+  getRemoveGameFromLibraryMsg,
+  getAddMoneyMsg
 };
