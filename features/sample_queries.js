@@ -162,7 +162,9 @@ module.exports = function(controller) {
     ['message'],
 
     async (bot, message) => {
-      
+      let nameOfGamesToRemove = message.intents[0].entities.game.map(game => game.value);
+      let removeFromLibraryMsg = await backendFns.getRemoveGameFromLibraryMsg(nameOfGamesToRemove);
+      await bot.reply(message, removeFromLibraryMsg);
     }
   
   );    

@@ -206,6 +206,42 @@ const getShowLibraryGamesMsg = async () => {
 };
 
 
+const removeGameFromLibrary = async (gameNames) => {
+  try {
+    let game_ids = await getGameIdsFromGameNames(gameNames);
+    let res = await axios.post(REMOVE_FROM_LIBRARY, { game_ids });
+    if(res.status !== 200) throw new Error();
+    return res.data.library;
+  }
+  catch(err) {
+    console.log('Error in removeGameFromLibrary');
+  }
+};
+
+const getRemoveGameFromLibraryMsg = async (gameNames) => {
+  try {
+    let remainingGames = await removeGameFromLibrary(gameNames);
+    if(!remainingGames) {
+      return [
+        'Something went wrong...couldn\'t remove from library'
+      ];
+    }
+    if(!remainingGames.length) {
+      return [
+        'Removed games. Library is empty.'
+      ];
+    }
+    else {
+      remainingGames = remainingGames.map(game => game.name);
+      remainingGames.unshift('Games removed. Remaining games are: ');
+      return remainingGames;
+    }
+  }
+  catch(err) {
+    console.log('Error in getRemoveGameFromLibraryMsg');
+  }
+}
+
 module.exports = {
   getAvailableGameNames,
   getBalance,
@@ -216,5 +252,6 @@ module.exports = {
   isCartAffordable,
   removeAllFromCart,
   purchaseCart,
-  getShowLibraryGamesMsg
+  getShowLibraryGamesMsg,
+  getRemoveGameFromLibraryMsg
 };
