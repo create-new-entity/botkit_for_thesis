@@ -138,4 +138,33 @@ module.exports = function(controller) {
   
   );
 
+  controller.hears(
+
+    async (message) => {
+        return message.intents[0].entities.intent[0].value.localeCompare(INTENTS.SHOW_LIBRARY) === 0;
+    },
+
+    ['message'],
+
+    async (bot, message) => {
+      let showLibraryMsg = await backendFns.getShowLibraryGamesMsg();
+      await bot.reply(message, showLibraryMsg);
+    }
+  
+  );
+
+  controller.hears(
+
+    async (message) => {
+        return message.intents[0].entities.intent[0].value.localeCompare(INTENTS.REMOVE_GAME_FROM_LIBRARY) === 0;
+    },
+
+    ['message'],
+
+    async (bot, message) => {
+      
+    }
+  
+  );    
+
 }

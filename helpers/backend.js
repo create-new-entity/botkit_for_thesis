@@ -173,6 +173,39 @@ const purchaseCart = async () => {
 };
 
 
+const getLibraryGameNames = async () => {
+  try {
+    let res = await axios.get(SHOW_LIBRARY_GAMES);
+    let libraryGames = res.data.library;
+    if(!libraryGames || !libraryGames.length) throw new Error();
+
+    return libraryGames.map(game => game.name);
+  }
+  catch(err) {
+    console.log('Error in getLibraryGameNames');
+  }
+};
+
+const getShowLibraryGamesMsg = async () => {
+  let libraryGameNames = await getLibraryGameNames();
+
+  if(!libraryGameNames){
+    return [
+      `Couldn'\t retrieve library games.`
+    ];
+  }
+  else if(!libraryGameNames.length){
+    return [
+      `Your library is empty.`
+    ];
+  }
+  else {
+    libraryGameNames.unshift('Games in your library are:');
+    return libraryGameNames;
+  }
+};
+
+
 module.exports = {
   getAvailableGameNames,
   getBalance,
@@ -182,5 +215,6 @@ module.exports = {
   getGameIdsFromGameNames,
   isCartAffordable,
   removeAllFromCart,
-  purchaseCart
+  purchaseCart,
+  getShowLibraryGamesMsg
 };
