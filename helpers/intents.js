@@ -11,6 +11,7 @@ const REMOVE_ALL_FROM_CART = 'remove_all_from_cart';
 const IS_CART_AFFORDABLE = 'is_cart_affordable';
 const BUY_CART_ITEMS = 'buy_cart_items';
 const ADD_MONEY = 'add_money';
+const REMOVE_LIBRARY = 'remove_library';
 
 const INTENTS = {
   AFFIRM,
@@ -22,6 +23,7 @@ const INTENTS = {
   ADD_TO_CART,
   REMOVE_FROM_CART,
   REMOVE_GAME_FROM_LIBRARY,
+  REMOVE_LIBRARY,
   REMOVE_ALL_FROM_CART,
   IS_CART_AFFORDABLE,
   BUY_CART_ITEMS,

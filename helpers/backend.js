@@ -10,6 +10,7 @@ SET_BALANCE = BASE_URL + 'set_balance';
 CHECK_AFFORDABILITY = BASE_URL + 'check_affordability';
 ADD_TO_LIBRARY = BASE_URL + 'add_to_library';
 REMOVE_FROM_LIBRARY = BASE_URL + 'remove_from_library';
+REMOVE_LIBRARY = BASE_URL + 'remove_library';
 SHOW_AVAILABLE_GAMES = BASE_URL + 'show_available_games';
 SHOW_LIBRARY_GAMES = BASE_URL + 'show_library_games';
 PURCHASE = BASE_URL + 'purchase';
@@ -292,6 +293,21 @@ const getDeleteCartMsg = async () => {
   }
 };
 
+const getRemoveLibraryMsg = async () => {
+  try {
+    let res = await axios.post(REMOVE_LIBRARY);
+    if(res.status !== 200) {
+      return ['Something went wrong. Couldn\'t remove library.'];
+    }
+    else {
+      return ['Removed your library.'];
+    }
+  }
+  catch(err) {
+    console.log('Error in getRemoveLibraryMsg');
+  }
+};
+
 
 const printLotsOfNewLines = () => {
   console.log();
@@ -312,12 +328,14 @@ module.exports = {
   addGamesToCart,
   getCart,
   removeGamesFromCart,
+  removeAllFromCart,
   getGameIdsFromGameNames,
   isCartAffordable,
   getDeleteCartMsg,
   purchaseCart,
   getShowLibraryGamesMsg,
   getRemoveGameFromLibraryMsg,
+  getRemoveLibraryMsg,
   getAddMoneyMsg,
   printLotsOfNewLines,
   witAI

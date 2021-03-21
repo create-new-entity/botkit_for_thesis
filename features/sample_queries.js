@@ -240,4 +240,24 @@ module.exports = function(controller) {
   
   );
 
+  controller.hears(
+
+    async (message) => {
+      try {
+        return message.intents[0].entities.intent[0].value.localeCompare(INTENTS.REMOVE_LIBRARY) === 0;
+      }
+      catch (err) {
+        return false;
+      }
+    },
+
+    ['message'],
+
+    async (bot, message) => {
+      let removeLibMsg = await backendFns.getRemoveLibraryMsg();
+      await bot.reply(message, removeLibMsg);
+    }
+  
+  );
+
 }
