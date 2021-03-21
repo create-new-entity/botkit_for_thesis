@@ -15,11 +15,14 @@ SHOW_AVAILABLE_GAMES = BASE_URL + 'show_available_games';
 SHOW_LIBRARY_GAMES = BASE_URL + 'show_library_games';
 PURCHASE = BASE_URL + 'purchase';
 ADD_BALANCE = BASE_URL + 'add_balance';
+GET_PREFERRED_GAMES = BASE_URL + 'get_preferred_games';
 
 BASE_URL_CART = 'http://localhost:3010/';
 ADD_CART = BASE_URL_CART + 'add';
 REMOVE_GAME_FROM_CART = BASE_URL_CART + 'remove';
 REMOVE_ALL_GAMES_FROM_CART = BASE_URL_CART + 'remove_all';
+GET_PREFERENCE = BASE_URL_CART + 'get_preference';
+SAVE_PREFERENCE = BASE_URL_CART + 'save_preference';
 
 
 const getAvailableGameNames = async () => {
@@ -308,6 +311,40 @@ const getRemoveLibraryMsg = async () => {
   }
 };
 
+const getPreference = async () => {
+  try {
+    let res = await axios.get(GET_PREFERENCE);
+    return res.data.preference;
+  }
+  catch(err) {
+    console.log('Error in getPreference');
+  }
+};
+
+const savePreference = async (preference) => {
+  try {
+    await axios.post(SAVE_PREFERENCE, { preference });
+  }
+  catch(err) {
+    console.log('Error in savePreference');
+  }
+};
+
+const getPreferedAvailableGamesMsg = async () => {
+  try {
+    let preference = await getPreference();
+    if(!preference) return ['You haven\'t set any preferences yet.'];
+    let res = await axios.get(GET_PREFERRED_GAMES, { data: { preference } });
+    let preferred_games = res.data.map(game => game.name);
+    if(preferred_games.length) return preferred_games;
+    else return ['Sorry. None of the games matchs your preferences.'];
+  }
+  catch(err) {
+    console.log('Error in getPreferedAvailableGamesMsg');
+    return ['Something went wrong. I couldn\'t filter out the games.'];
+  }
+};
+
 
 const printLotsOfNewLines = () => {
   console.log();
@@ -336,6 +373,8 @@ module.exports = {
   getShowLibraryGamesMsg,
   getRemoveGameFromLibraryMsg,
   getRemoveLibraryMsg,
+  savePreference,
+  getPreferedAvailableGamesMsg,
   getAddMoneyMsg,
   printLotsOfNewLines,
   witAI
