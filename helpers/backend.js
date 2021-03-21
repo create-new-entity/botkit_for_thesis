@@ -1,5 +1,8 @@
 const axios = require('axios');
-const { IS_CART_AFFORDABLE } = require('./intents');
+const { Wit } = require('node-wit');
+const client = new Wit({
+  accessToken: 'YNYO7PDP33T7LY6PSH37RQ6OB26DE4EU'
+});
 
 BASE_URL = 'http://localhost:3009/thesis_bot_backend/common/';
 CHECK_BALANCE = BASE_URL + 'check_balance';
@@ -64,6 +67,16 @@ const removeGamesFromCart = async (games) => {
   }
   catch(err) {
     console.log('Error in removeGamesFromCart');
+  }
+};
+
+const removeAllGamesFromCart = async () => {
+  try {
+    let res = await axios.post(REMOVE_ALL_GAMES_FROM_CART);
+    if(res.status !== 200) throw new Error();
+  }
+  catch(err) {
+    console.log('Error in removeAllGamesFromCart');
   }
 };
 
@@ -159,6 +172,7 @@ const purchaseCart = async () => {
     
     res = await axios.post(PURCHASE, { game_ids });
     if(res.status === 200) {
+      await removeAllFromCart();
       return [
         `Purchase successful. You can check your library now.`
       ];
@@ -268,6 +282,30 @@ const getAddMoneyMsg = async (amount) => {
   ];
 };
 
+const getDeleteCartMsg = async () => {
+  try {
+    await removeAllGamesFromCart();
+    return ['Everything from your cart has been deleted.'];
+  }
+  catch (err) {
+    return ['Something went wrong. Couldn\'t remove items from cart.'];
+  }
+};
+
+
+const printLotsOfNewLines = () => {
+  console.log();
+  console.log();
+  console.log();
+  console.log();
+  console.log();
+  console.log();
+};
+
+const witAI = async (text) => {
+  return client.message(text);
+};
+
 module.exports = {
   getAvailableGameNames,
   getBalance,
@@ -276,9 +314,11 @@ module.exports = {
   removeGamesFromCart,
   getGameIdsFromGameNames,
   isCartAffordable,
-  removeAllFromCart,
+  getDeleteCartMsg,
   purchaseCart,
   getShowLibraryGamesMsg,
   getRemoveGameFromLibraryMsg,
-  getAddMoneyMsg
+  getAddMoneyMsg,
+  printLotsOfNewLines,
+  witAI
 };

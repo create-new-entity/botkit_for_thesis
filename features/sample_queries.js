@@ -7,7 +7,12 @@ module.exports = function(controller) {
   controller.hears(
 
     async (message) => {
+      try {
         return message.intents[0].entities.intent[0].value.localeCompare(INTENTS.SHOW_AVAILABLE_GAMES) === 0;
+      }
+      catch (err) {
+        return false;
+      }
     },
 
     ['message'],
@@ -24,7 +29,12 @@ module.exports = function(controller) {
   controller.hears(
 
     async (message) => {
+      try {
         return message.intents[0].entities.intent[0].value.localeCompare(INTENTS.CHECK_BALANCE) === 0;
+      }
+      catch (err) {
+        return false;
+      }
     },
 
     ['message'],
@@ -39,7 +49,12 @@ module.exports = function(controller) {
   controller.hears(
 
     async (message) => {
+      try {
         return message.intents[0].entities.intent[0].value.localeCompare(INTENTS.ADD_TO_CART) === 0;
+      }
+      catch (err) {
+        return false;
+      }
     },
 
     ['message'],
@@ -54,7 +69,12 @@ module.exports = function(controller) {
   controller.hears(
 
     async (message) => {
+      try {
         return message.intents[0].entities.intent[0].value.localeCompare(INTENTS.SHOW_CART_ITEMS) === 0;
+      }
+      catch (err) {
+        return false;
+      }
     },
 
     ['message'],
@@ -74,7 +94,12 @@ module.exports = function(controller) {
   controller.hears(
 
     async (message) => {
+      try {
         return message.intents[0].entities.intent[0].value.localeCompare(INTENTS.REMOVE_FROM_CART) === 0;
+      }
+      catch (err) {
+        return false;
+      }
     },
 
     ['message'],
@@ -94,7 +119,12 @@ module.exports = function(controller) {
   controller.hears(
 
     async (message) => {
+      try {
         return message.intents[0].entities.intent[0].value.localeCompare(INTENTS.IS_CART_AFFORDABLE) === 0;
+      }
+      catch (err) {
+        return false;
+      }
     },
 
     ['message'],
@@ -110,7 +140,12 @@ module.exports = function(controller) {
   controller.hears(
 
     async (message) => {
+      try {
         return message.intents[0].entities.intent[0].value.localeCompare(INTENTS.REMOVE_ALL_FROM_CART) === 0;
+      }
+      catch (err) {
+        return false;
+      }
     },
 
     ['message'],
@@ -126,7 +161,12 @@ module.exports = function(controller) {
   controller.hears(
 
     async (message) => {
+      try {
         return message.intents[0].entities.intent[0].value.localeCompare(INTENTS.BUY_CART_ITEMS) === 0;
+      }
+      catch (err) {
+        return false;
+      }
     },
 
     ['message'],
@@ -141,7 +181,12 @@ module.exports = function(controller) {
   controller.hears(
 
     async (message) => {
+      try {
         return message.intents[0].entities.intent[0].value.localeCompare(INTENTS.SHOW_LIBRARY) === 0;
+      }
+      catch (err) {
+        return false;
+      }
     },
 
     ['message'],
@@ -156,7 +201,12 @@ module.exports = function(controller) {
   controller.hears(
 
     async (message) => {
+      try {
         return message.intents[0].entities.intent[0].value.localeCompare(INTENTS.REMOVE_GAME_FROM_LIBRARY) === 0;
+      }
+      catch (err) {
+        return false;
+      }
     },
 
     ['message'],
@@ -173,7 +223,12 @@ module.exports = function(controller) {
   controller.hears(
 
     async (message) => {
+      try {
         return message.intents[0].entities.intent[0].value.localeCompare(INTENTS.ADD_MONEY) === 0;
+      }
+      catch (err) {
+        return false;
+      }
     },
 
     ['message'],
