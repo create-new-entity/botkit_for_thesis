@@ -13,6 +13,7 @@ const BUY_CART_ITEMS = 'buy_cart_items';
 const ADD_MONEY = 'add_money';
 const REMOVE_LIBRARY = 'remove_library';
 const UPDATE_PREFERENCES = 'update_preferences';
+const APPLY_PREFERENCES = 'apply_preferance_to_available_games';
 
 const INTENTS = {
   AFFIRM,
@@ -29,7 +30,8 @@ const INTENTS = {
   IS_CART_AFFORDABLE,
   BUY_CART_ITEMS,
   ADD_MONEY,
-  UPDATE_PREFERENCES
+  UPDATE_PREFERENCES,
+  APPLY_PREFERENCES
 };
 
 

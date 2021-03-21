@@ -259,5 +259,25 @@ module.exports = function(controller) {
     }
   
   );
+  
+  controller.hears(
+
+    async (message) => {
+      try {
+        return message.intents[0].entities.intent[0].value.localeCompare(INTENTS.APPLY_PREFERENCES) === 0;
+      }
+      catch (err) {
+        return false;
+      }
+    },
+
+    ['message'],
+
+    async (bot, message) => {
+      let preferredGamesMsg = await backendFns.getPreferedAvailableGamesMsg();
+      await bot.reply(message, preferredGamesMsg);
+    }
+  
+  );
 
 }
