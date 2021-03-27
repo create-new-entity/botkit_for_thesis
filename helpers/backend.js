@@ -16,6 +16,8 @@ SHOW_LIBRARY_GAMES = BASE_URL + 'show_library_games';
 PURCHASE = BASE_URL + 'purchase';
 ADD_BALANCE = BASE_URL + 'add_balance';
 GET_PREFERRED_GAMES = BASE_URL + 'get_preferred_games';
+IS_GENRE_CORRECT = BASE_URL + 'is_genre_correct';
+IS_PLATFORM_CORRECT = BASE_URL + 'is_platform_correct';
 
 BASE_URL_CART = 'http://localhost:3010/';
 ADD_CART = BASE_URL_CART + 'add';
@@ -345,6 +347,28 @@ const getPreferedAvailableGamesMsg = async () => {
   }
 };
 
+const isGenreCorrect = async (genre) => {
+  try {
+    let res = await axios.get(IS_GENRE_CORRECT, { data: { genre } });
+    if(res.data.correct) return true;
+    return false;
+  }
+  catch(err) {
+    console.log('Error in isGenreCorrect');
+  }
+};
+
+const isPlatformCorrect = async (platform) => {
+  try {
+    let res = await axios.get(IS_PLATFORM_CORRECT, { data: { platform } });
+    if(res.data.correct) return true;
+    return false;
+  }
+  catch(err) {
+    console.log('Error in isPlatformCorrect');
+  }
+};
+
 
 const printLotsOfNewLines = () => {
   console.log();
@@ -358,6 +382,17 @@ const printLotsOfNewLines = () => {
 const witAI = async (text) => {
   return client.message(text);
 };
+
+
+
+//https://stackoverflow.com/questions/175739/built-in-way-in-javascript-to-check-if-a-string-is-a-valid-number
+const isNumeric = (testStr) => {
+  if(isNaN(testStr)) return false;
+  if(typeof testStr === "number") return true;
+  if(typeof testStr != "string") return false;
+  return !isNaN(testStr) && !isNaN(parseFloat(testStr));
+};
+
 
 module.exports = {
   getAvailableGameNames,
@@ -376,6 +411,9 @@ module.exports = {
   savePreference,
   getPreferedAvailableGamesMsg,
   getAddMoneyMsg,
+  isGenreCorrect,
+  isNumeric,
+  isPlatformCorrect,
   printLotsOfNewLines,
   witAI
 };

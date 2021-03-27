@@ -11,8 +11,6 @@ const INTENTS = require('./../helpers/intents');
 module.exports = function(controller) {
 
   let convo = new BotkitConversation('PREFERENCES', controller);
-  let successConvo = new BotkitConversation('SUCCESS', controller);
-  let failureConvo = new BotkitConversation('FAILURE', controller);
 
   convo.ask(
     'What kind of games do you like (e.g. Action, Adventure)? Give me one genre name.',
@@ -38,29 +36,46 @@ module.exports = function(controller) {
     {key: 'rating'}
   );
 
+
   convo.after(async(variables, bot) => {
+
+    let genreCorrect, platformCorrect;
     let preference = {
       'genre': variables.genre,
       'price': parseFloat(variables.price),
       'platform': variables.platform,
       'rating': parseFloat(variables.rating)
     };
-    
+
+
     try {
-      await backendFns.savePreference(preference);
+
+      genreCorrect = await backendFns.isGenreCorrect(preference.genre);
+      platformCorrect = await backendFns.isPlatformCorrect(preference.platform);
+      priceIsNumeric = backendFns.isNumeric(preference.price);
+      ratingIsNumeric = backendFns.isNumeric(preference.rating);
+
+      if(genreCorrect && platformCorrect && priceIsNumeric && ratingIsNumeric) {
+        await backendFns.savePreference(preference);
+        await bot.say('I\'ve updated your preferences.');
+      }
+      else {
+        throw new Error();
+      }
+
     }
+
     catch(err) {
-      throw new Error();
+
+      await bot.say('Something went wrong...sorry we have to try again.');
+      await bot.beginDialog('PREFERENCES');
+
     }
+
+
   });
+
   controller.addDialog(convo);
-
-
-  successConvo.say('I\'ve updated your preferences.');
-  controller.addDialog(successConvo);
-
-  failureConvo.say('Something went wrong. I couldn\'t update your preferences.');
-  controller.addDialog(failureConvo);
 
   controller.hears(
 
@@ -78,16 +93,7 @@ module.exports = function(controller) {
       async (bot, message) => {
         await bot.beginDialog('PREFERENCES');
       }
-    
-  );
 
-  controller.afterDialog('PREFERENCES', async(bot, results) => {
-    if(results._status !== 'completed') {
-      await bot.beginDialog('SUCCESS');
-    }
-    else {
-      await bot.beginDialog('FAILURE');
-    }
-  });
+  );
 
 }
