@@ -2,27 +2,55 @@
  * Copyright (c) Microsoft Corporation. All rights reserved.
  * Licensed under the MIT License.
  */
+
+const { BotkitConversation } = require('botkit');
+
 module.exports = function(controller) {
+    
+    let convo = new BotkitConversation('hmm', controller);
+    
+    convo.ask('What is your name?', async(response, convo, bot, full_message) => {
+        await bot.say('Oh your name is ' + response);
+       }, {key: 'name'});
+       
+    // ask a question, evaluate answer, take conditional action based on response
+    convo.ask('Do you want to eat a taco?', [
+    {
+        pattern: 'yes',
+        type: 'string',
+        handler: async(response_text, convo, bot, full_message) => {
+            return await convo.gotoThread('yes_taco');
+        }
+    },
+    {
+        pattern: 'no',
+        type: 'string',
+        handler: async(response_text, convo, bot, full_message) => {
+            return await convo.gotoThread('no_taco');
+        }
+        },
+        {
+            default: true,
+            handler: async(response_text, convo, bot, full_message) => {
+                await bot.say('I do not understand your response!');
+                // start over!
+                return await convo.repeat();
+            }
+        }
+    ], {key: 'tacos'});
 
-    // use a function to match a condition in the message
-    // controller.hears(async (message) => true , ['message'], async (bot, message) => {
-    //     console.log();
-    //     console.log();
-    //     console.log();
-    //     console.log();
-    //     console.log('WIT STUFFS', message.intents[0].entities.intent[0].value);
-    //     // console.log('WIT STUFFS', message.intent.entities);
-    //     await bot.reply(message, 'I heard "foo" via a function test');
-    // });
+    controller.addDialog(convo);
 
-    // use a regular expression to match the text of the message
-    // controller.hears(new RegExp(/^\d+$/), ['message','direct_message'], async function(bot, message) {
-    //     await bot.reply(message,{ text: 'I heard a number using a regular expression.' });
-    // });
+    controller.hears(
 
-    // // match any one of set of mixed patterns like a string, a regular expression
-    // controller.hears(['allcaps', new RegExp(/^[A-Z\s]+$/)], ['message','direct_message'], async function(bot, message) {
-    //     await bot.reply(message,{ text: 'I HEARD ALL CAPS!' });
-    // });
+        'fsi',
+    
+        ['message'],
+    
+        async (bot, message) => {
+          await bot.beginDialog('hmm');
+        }
+      
+    );
 
 }

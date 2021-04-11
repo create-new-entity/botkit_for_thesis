@@ -1,8 +1,10 @@
 const INTENTS = require('../helpers/intents');
 const backendFns = require('../helpers/backend');
+const PREFERENCES_CONVO = require('./../conversations/preferences_form');
 
 module.exports = function(controller) {
 
+  controller.addDialog(PREFERENCES_CONVO(controller));
 
   controller.hears(
 
@@ -18,6 +20,7 @@ module.exports = function(controller) {
     ['message'],
 
     async (bot, message) => {
+      console.log(message);
       const availableGameNames = await backendFns.getAvailableGameNames();
       await bot.reply(message, availableGameNames);
     }
@@ -279,5 +282,25 @@ module.exports = function(controller) {
     }
   
   );
+
+
+  controller.hears(
+
+    async (message) => {
+      try {
+        return message.intents[0].entities.intent[0].value.localeCompare(INTENTS.UPDATE_PREFERENCES) === 0;
+      }
+      catch (err) {
+        return false;
+      }
+    },
+
+    ['message'],
+
+    async (bot, message) => {
+      await bot.beginDialog('PREFERENCES');
+    }
+
+);
 
 }
